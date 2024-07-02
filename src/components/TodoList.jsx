@@ -4,7 +4,15 @@ import Todos from "./Todos";
 import Edit from "./Edit";
 import TodoDone from "./TodoDone";
 import { db } from "../config/firebase";
-import { query, collection, onSnapshot } from "firebase/firestore";
+import {
+  query,
+  collection,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from "firebase/firestore";
 
 const TodoList = () => {
   const [todoVal, setTodo] = useState([]);
@@ -24,44 +32,46 @@ const TodoList = () => {
 
   // Createtodo
   const createTodo = (todo) => {
-    setTodo([
-      ...todoVal,
-      { id: crypto.randomUUID(), task: todo, isEditing: false, isDone: false },
-    ]);
+    addDoc(collection(db, "todos"), {
+      task: todo,
+      isEditing: false,
+      isDone: false,
+    });
   };
 
   // Delete todo
   const deleteTodo = (id) => {
-    setTodo(todoVal.filter((todo) => todo.id !== id));
+    // setTodo(todoVal.filter((todo) => todo.id !== id));
+    deleteDoc(doc(db, "todos", id));
   };
 
   // ediTodo trigger
-  const editTodo = (id) => {
-    setTodo(
-      todoVal.map((todo) =>
-        todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
-      )
-    );
+  const editTodo = (todo) => {
+    // setTodo(
+    //   todoVal.map((todo) =>
+    //     todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
+    //   )
+    // );
+    updateDoc(doc(db, "todos", todo.id), {
+      isEditing: !todo.isEditing,
+    });
   };
 
   // edittodo edit form
   const editTask = (task, id) => {
-    setTodo(
-      todoVal.map((todo) =>
-        todo.id === id ? { ...todo, task, isEditing: !todo.isEditing } : todo
-      )
-    );
+    updateDoc(doc(db, "todos", id), {
+      task: task,
+      isEditing: false,
+    });
   };
 
   const checkTodo = (id) => {
-    const updatedTodos = todoVal.map((todo) => {
-      if (todo.id === id) {
-        return { ...todo, isDone: !todo.isDone };
-      }
-      return todo;
-    });
-
-    setTodo(updatedTodos);
+    const todo = todoVal.find((todo) => todo.id === id);
+    if (todo) {
+      updateDoc(doc(db, "todos", todo.id), {
+        isDone: !todo.isDone,
+      });
+    }
   };
 
   const activeTodos = todoVal.filter((todo) => !todo.isDone);

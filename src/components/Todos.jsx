@@ -11,7 +11,7 @@ const Todos = ({ task, deleteTodo, editTodo, checkTodo }) => {
         </p>
       </div>
       <div className="flex items-center gap-x-2">
-        <BiEdit className="text-2xl" onClick={() => editTodo(task.id)} />
+        <BiEdit className="text-2xl" onClick={() => editTodo(task)} />
         <BiTrash className="text-2xl" onClick={() => deleteTodo(task.id)} />
       </div>
     </div>

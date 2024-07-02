@@ -6,7 +6,7 @@ const Form = ({ createTodo }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!todos.trim()) {
+    if (todos === "") {
       return;
     }
 
