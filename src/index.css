@@ -1,0 +1,18 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+  height: 0;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Set the background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.4); /* Set the color of the scrollbar thumb */
+}
