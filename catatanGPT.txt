@@ -1,0 +1,6 @@
+Penggunaan useEffect:
+
+useEffect dalam konteks tersebut digunakan untuk mengatur pendengaran (listening) dan membersihkannya saat komponen di-unmount.
+useEffect memastikan bahwa onSnapshot hanya dipanggil sekali ketika komponen pertama kali di-mount, dan callback unsubscribe memastikan bahwa pendengaran dihentikan saat komponen di-unmount. Tanpa useEffect, onSnapshot bisa dipanggil berulang kali setiap kali komponen di-render ulang, yang bisa menyebabkan kebocoran memori dan peningkatan beban jaringan.
+
+Jadi, lebih tepatnya, useEffect digunakan untuk mengatur lifecycle dari onSnapshot, memastikan bahwa pendengaran diatur saat komponen di-mount dan dihentikan saat komponen di-unmount, bukan untuk mencegah onSnapshot mendengarkan secara terus-menerus. Pendengaran real-time adalah fitur utama dari onSnapshot, dan useEffect digunakan untuk memastikan bahwa fitur ini dikelola dengan benar dalam lifecycle komponen React.
