@@ -19,58 +19,115 @@ const TodoList = () => {
 
   // read todo
   useEffect(() => {
+    // Membuat query untuk koleksi "todos"
     const qry = query(collection(db, "todos"));
+
+    // Menyetel pendengaran real-time pada query
     const unsubscribe = onSnapshot(qry, (querySnapshot) => {
       let todosArr = [];
+      // Mengumpulkan data dari setiap dokumen dalam snapshot
       querySnapshot.forEach((doc) => {
         todosArr.push({ ...doc.data(), id: doc.id });
       });
+      // Memperbarui state dengan data terbaru
       setTodo(todosArr);
     });
+
+    // Mengembalikan fungsi unsubscribe untuk menghentikan pendengaran saat komponen di-unmount
     return () => unsubscribe();
   }, []);
 
   // Createtodo
-  const createTodo = (todo) => {
-    addDoc(collection(db, "todos"), {
-      task: todo,
-      isEditing: false,
-      isDone: false,
-    });
+  // const createTodo = (todo) => {
+  //   addDoc(collection(db, "todos"), {
+  //     task: todo,
+  //     isEditing: false,
+  //     isDone: false,
+  //   });
+  // };
+  const createTodo = async (todo) => {
+    try {
+      await addDoc(collection(db, "todos"), {
+        task: todo,
+        isEditing: false,
+        isDone: false,
+      });
+    } catch (error) {
+      console.error("Error creating todo:", error);
+    }
   };
 
   // Delete todo
-  const deleteTodo = (id) => {
-    // setTodo(todoVal.filter((todo) => todo.id !== id));
-    deleteDoc(doc(db, "todos", id));
+  // const deleteTodo = (id) => {
+  //   // setTodo(todoVal.filter((todo) => todo.id !== id));
+  //   deleteDoc(doc(db, "todos", id));
+  // };
+  const deleteTodo = async (id) => {
+    try {
+      await deleteDoc(doc(db, "todos", id));
+    } catch (error) {
+      console.error("Error deleting todo:", error);
+    }
   };
 
   // ediTodo trigger
-  const editTodo = (todo) => {
-    // setTodo(
-    //   todoVal.map((todo) =>
-    //     todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
-    //   )
-    // );
-    updateDoc(doc(db, "todos", todo.id), {
-      isEditing: !todo.isEditing,
-    });
+  // const editTodo = (todo) => {
+  //   // setTodo(
+  //   //   todoVal.map((todo) =>
+  //   //     todo.id === id ? { ...todo, isEditing: !todo.isEditing } : todo
+  //   //   )
+  //   // );
+  //   updateDoc(doc(db, "todos", todo.id), {
+  //     isEditing: !todo.isEditing,
+  //   });
+  // };
+  const editTodo = async (todo) => {
+    try {
+      await updateDoc(doc(db, "todos", todo.id), {
+        isEditing: !todo.isEditing,
+      });
+    } catch (error) {
+      console.error("Error editing todo:", error);
+    }
   };
 
   // edittodo edit form
-  const editTask = (task, id) => {
-    updateDoc(doc(db, "todos", id), {
-      task: task,
-      isEditing: false,
-    });
+  // const editTask = (task, id) => {
+  //   updateDoc(doc(db, "todos", id), {
+  //     task: task,
+  //     isEditing: false,
+  //   });
+  // };
+  const editTask = async (task, id) => {
+    try {
+      await updateDoc(doc(db, "todos", id), {
+        task: task,
+        isEditing: false,
+      });
+    } catch (error) {
+      console.error("Error updating task:", error);
+    }
   };
 
-  const checkTodo = (id) => {
+  // const checkTodo = (id) => {
+  //   const todo = todoVal.find((todo) => todo.id === id);
+  //   if (todo) {
+  //     updateDoc(doc(db, "todos", todo.id), {
+  //       isDone: !todo.isDone,
+  //     });
+  //   }
+  // };
+
+  const checkTodo = async (id) => {
     const todo = todoVal.find((todo) => todo.id === id);
     if (todo) {
-      updateDoc(doc(db, "todos", todo.id), {
-        isDone: !todo.isDone,
-      });
+      try {
+        await updateDoc(doc(db, "todos", todo.id), {
+          isDone: !todo.isDone,
+        });
+      } catch (error) {
+        console.error("Error updating todo status:", error);
+      }
     }
   };
 
